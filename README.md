@@ -13,7 +13,10 @@ at all times.
 
 Configuration parameters:
 
-* `reminder_file` : File to read in, defaults to ~/.reminder
-* `separator` : How to separate the lines, defaults to |
-* `cache_timeout` : How often to refresh the module
+* reminder_file :   File to read in, defaults to ~/.reminder
+* separator     :   How to separate the lines, defaults to |
+* cache_timeout :   How often to refresh the module, defaults to 60 (seconds)
+* max_lines     :   How many lines to display on the screen at one time, defaults to 2.
+                    I've found that 2 is a good value for a 1366x768 screen, you will
+                    probably want to increase it for larger screens.
 
