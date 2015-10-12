@@ -35,10 +35,10 @@ class Py3status:
     def _load_file(self):
         with open(self.reminder_file) as f:
             self._contents = list(map(lambda x: x.rstrip(), f.readlines()))
-        self._last_index = 0
+        # Validate index
+        if self._last_index >= len(self._contents): self._last_index = 0
 
     def __init__(self):
-        # TODO: Reload file on an event
         self._load_file()
 
     def kill(self, i3s_output_list, i3s_config):
@@ -48,6 +48,9 @@ class Py3status:
         self.put_reminder(i3s_output_list, i3s_config)
 
     def put_reminder(self, i3s_output_list, i3s_config):
+        # Reload file on every cache timeout
+        self._load_file()
+
         # TODO: Error handling when missing file
         if len(self._contents) == 0:
             return {}
