@@ -21,6 +21,7 @@ from time import time
 
 class Py3status:
     reminder_file = join(expanduser("~"), ".reminder")
+    separator = "|"
     cache_timeout = 5
 
     def __init__(self):
@@ -35,7 +36,7 @@ class Py3status:
             contents = f.readlines()
             for line in contents:
                 line = line.rstrip()
-                full_text = str.format("{0} | {1}", full_text, line)
+                full_text = str.format("{0} {2} {1}", full_text, line, self.separator)
             full_text = full_text[3:]
             response = {
                 'full_text': full_text,
