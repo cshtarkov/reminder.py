@@ -6,6 +6,7 @@ the contents one by line, separated by a separator.
 The intended use is to keep a file e.g. ~/.reminder and to echo
 important notes into it, so that it can be visible on your screen
 at all times.
+Click the component to go to the next set of tasks immediately.
 
 Configuration parameters:
     - reminder_file :   File to read in, defaults to ~/.reminder
@@ -31,13 +32,20 @@ class Py3status:
     _contents = []
     _last_index = 0
 
-    def __init__(self):
-        # TODO: Reload file on an event
+    def _load_file(self):
         with open(self.reminder_file) as f:
             self._contents = list(map(lambda x: x.rstrip(), f.readlines()))
+        self._last_index = 0
+
+    def __init__(self):
+        # TODO: Reload file on an event
+        self._load_file()
 
     def kill(self, i3s_output_list, i3s_config):
         pass
+
+    def on_click(self, i3s_output_list, i3s_config, event):
+        self.put_reminder(i3s_output_list, i3s_config)
 
     def put_reminder(self, i3s_output_list, i3s_config):
         # TODO: Error handling when missing file
