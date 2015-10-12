@@ -32,6 +32,7 @@ class Py3status:
     _last_index = 0
 
     def __init__(self):
+        # TODO: Reload file on an event
         with open(self.reminder_file) as f:
             self._contents = list(map(lambda x: x.rstrip(), f.readlines()))
 
@@ -39,16 +40,20 @@ class Py3status:
         pass
 
     def put_reminder(self, i3s_output_list, i3s_config):
+        # TODO: Error handling when missing file
         if len(self._contents) == 0:
             return {}
 
         full_text = ""
+        # Upper bound is either the next `max_lines` lines or the end of the file.
         lower = self._last_index
         upper = self._last_index + self.max_lines if self._last_index + self.max_lines < len(self._contents) else len(self._contents)
+        # Join the string
         for line in self._contents[lower:upper]:
             full_text = str.format("{0} {2} {1}", full_text, line, self.separator)
             self._last_index = upper
             if self._last_index == len(self._contents): self._last_index = 0
+        # Remove initial separator
         self._full_text = full_text[3:]
         response = {
             'full_text': self._full_text,
