@@ -22,27 +22,36 @@ from time import time
 class Py3status:
     reminder_file = join(expanduser("~"), ".reminder")
     separator = "|"
-    cache_timeout = 5
+    cache_timeout = 60
+    max_lines = 2
+
+    _contents = []
+    _last_index = 0
 
     def __init__(self):
-        pass
+        with open(self.reminder_file) as f:
+            self._contents = list(map(lambda x: x.rstrip(), f.readlines()))
 
     def kill(self, i3s_output_list, i3s_config):
         pass
 
     def put_reminder(self, i3s_output_list, i3s_config):
-        with open(self.reminder_file) as f:
-            full_text = ""
-            contents = f.readlines()
-            for line in contents:
-                line = line.rstrip()
-                full_text = str.format("{0} {2} {1}", full_text, line, self.separator)
-            full_text = full_text[3:]
-            response = {
-                'full_text': full_text,
-                'cached_until': time() + self.cache_timeout
-            }
-            return response
+        if len(self._contents) == 0:
+            return {}
+
+        full_text = ""
+        lower = self._last_index
+        upper = self._last_index + self.max_lines if self._last_index + self.max_lines < len(self._contents) else len(self._contents)
+        for line in self._contents[lower:upper]:
+            full_text = str.format("{0} {2} {1}", full_text, line, self.separator)
+            self._last_index = upper
+            if self._last_index == len(self._contents): self._last_index = 0
+        self._full_text = full_text[3:]
+        response = {
+            'full_text': self._full_text,
+            'cached_until': time() + self.cache_timeout
+        }
+        return response
 
 if __name__ == "__main__":
     from time import sleep
