@@ -15,6 +15,7 @@ Configuration parameters:
     - max_lines     :   How many lines to display on the screen at one time, defaults to 2.
                         I've found that 2 is a good value for a 1366x768 screen, you will
                         probably want to increase it for larger screens.
+    - color         :   The color of the text, defaults to "#AAAAAA"
 
 @author Christian Shtarkov christian@shtarkov.net
 @license MIT
@@ -28,6 +29,7 @@ class Py3status:
     separator = "|"
     cache_timeout = 60
     max_lines = 2
+    color = "#AAAAAA"
 
     _contents = []
     _last_index = 0
@@ -74,7 +76,8 @@ class Py3status:
         self._full_text = full_text[3:]
         response = {
             'full_text': self._full_text,
-            'cached_until': time() + self.cache_timeout
+            'cached_until': time() + self.cache_timeout,
+            'color': self.color
         }
         return response
 
