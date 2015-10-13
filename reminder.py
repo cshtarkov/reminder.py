@@ -45,7 +45,13 @@ class Py3status:
         pass
 
     def on_click(self, i3s_output_list, i3s_config, event):
-        self.put_reminder(i3s_output_list, i3s_config)
+        # put_reminder will be automatically called by py3status
+        # If the left button is clicked, we don't need to do anything.
+        # If the right button is clicked (which is 3 for some reason), move the index to the left,
+        # so on the next put_reminder call the previous item will be shown.
+        if event['button'] == 3:
+            self._last_index -= (2*self.max_lines)
+            if self._last_index < 0: self._last_index = len(self._contents) + self._last_index
 
     def put_reminder(self, i3s_output_list, i3s_config):
         # Reload file on every cache timeout
