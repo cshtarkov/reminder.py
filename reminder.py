@@ -36,7 +36,7 @@ class Py3status:
 
     def _load_file(self):
         with open(self.reminder_file) as f:
-            self._contents = list(map(lambda x: x.rstrip(), f.readlines()))
+            self._contents = list(filter(lambda y: y != "", map(lambda x: x.rstrip(), f.readlines())))
         # Validate index
         if self._last_index >= len(self._contents): self._last_index = 0
 
